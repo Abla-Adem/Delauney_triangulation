@@ -1,0 +1,282 @@
+{
+    "desc": "Simulation of CVM paralel algorithm",
+    "grammarVersion": 3,
+    "implementation": {
+      "name": "executionGraph",
+      "version": 1,
+      "settings": {
+        "displayName": "Graph",
+        "id": "graph",
+        "type": "ExecutionGraph",
+        "implementation": {
+          "blocks": [
+            {
+              "displayName": "Add 1",
+              "id": "add1",
+              "type": "Function",
+              "implementation": {
+                "pool": "CSITutorialPool",
+                "function": "csiAdd",
+                "version": 1
+              }
+            },
+            {
+              "displayName": "Add 2",
+              "id": "add2",
+              "type": "Function",
+              "implementation": {
+                "pool": "CSITutorialPool",
+                "function": "csiAdd",
+                "version": 1
+              }
+            },
+            {
+              "displayName": "Add 3",
+              "id": "add3",
+              "type": "Function",
+              "implementation": {
+                "pool": "CSITutorialPool",
+                "function": "csiAdd",
+                "version": 1
+              }
+            },
+            {
+
+              "displayName": "Wait all",
+
+              "id": "join",
+
+              "type": "Logical",
+
+              "implementation": {
+
+                "nbPorts": 3,
+
+                "mode": "waitAll"
+
+              }
+
+            }
+          ],
+          "controlFlows": [
+            {
+              "from": "graph.call",
+              "to": "add1.call"
+            },
+            
+            {
+              "from": "add1.success",
+              "to": "add2.call"
+            },
+            
+            {
+              "from": "add1.success",
+              "to": "add3.call"
+            },
+            {
+              "from": "add2.success",
+              "to": "join.call"
+            },
+            {
+              "from": "add3.success",
+              "to": "join.call"
+            },
+            {
+              "from": "add1.success",
+              "to": "join.call"
+            },
+            {
+              "from": "join.success",
+              "to": "graph.success"
+            }
+            
+          ],
+          "dataFlows": [
+            {
+              "from": "graph.call.a",
+              "to": "add1.call.a"
+            },
+            {
+              "from": "graph.call.size",
+              "to": "add1.call.size"
+            },
+            
+
+
+            
+            {
+              "from": "add1.success.subdomain1",
+              "to": "add2.call.a"
+            },
+            {
+              "from": "add1.success.size1",
+              "to": "add2.call.size"
+            },
+            
+
+
+
+            {
+              "from": "add1.success.subdomain2",
+              "to": "add3.call.a"
+            },
+            {
+              "from": "add1.success.size2",
+              "to": "add3.call.size"
+            },
+            
+            
+            
+            {
+              "from": "add1.success.result",
+              "to": "graph.success.result"
+            },
+            {
+              "from": "add2.success.result",
+              "to": "graph.success.result1"
+            },
+            {
+              "from": "add3.success.result",
+              "to": "graph.success.result2"
+            },
+
+
+
+
+            {
+              "from": "add2.success.subdomain1",
+              "to": "graph.success.tab1"
+            },
+            {
+              "from": "add2.success.size1",
+              "to": "graph.success.sizetab1"
+            },
+            {
+              "from": "add2.success.subdomain2",
+              "to": "graph.success.tab2"
+            },
+            {
+              "from": "add2.success.size2",
+              "to": "graph.success.sizetab2"
+            },
+
+
+
+
+            {
+              "from": "add3.success.subdomain1",
+              "to": "graph.success.tab3"
+            },
+            {
+              "from": "add3.success.size1",
+              "to": "graph.success.sizetab3"
+            },
+            {
+              "from": "add3.success.subdomain2",
+              "to": "graph.success.tab4"
+            },
+            {
+              "from": "add3.success.size2",
+              "to": "graph.success.sizetab4"
+            }
+
+
+
+
+
+
+
+
+
+
+
+           
+          ],
+          "runtimeSettings": {
+            "directData": true
+          }
+        }
+      }
+    },
+    "onCall": {
+      "in": {
+        "parameters": [
+          {
+            "label": "a",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label":"size",
+            "desc": "size of a",
+            "basic": "int32"
+          }
+        ]
+      },
+      "out": {
+        "parameters": [
+          {
+            "label": "result",
+            "basic": "float"
+          },
+          {
+            "label": "result1",
+            "basic": "float"
+          },
+          {
+            "label": "result2",
+            "basic": "float"
+          },
+
+
+          {
+            "label": "tab1",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label": "tab2",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label": "tab3",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label": "tab4",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          
+
+          {
+            "label":"sizetab1",
+            "desc": "size of subdomain1",
+            "basic": "int32"
+          },
+          {
+            "label":"sizetab2",
+            "desc": "size of subdomain2",
+            "basic": "int32"
+          },
+          {
+            "label":"sizetab3",
+            "desc": "size of subdomain1",
+            "basic": "int32"
+          },
+          {
+            "label":"sizetab4",
+            "desc": "size of subdomain2",
+            "basic": "int32"
+          }
+          
+        ]
+      }
+    },
+    "progress": {},
+    "throwError": {
+      "type": "CSIExecGraphError"
+    }
+}
