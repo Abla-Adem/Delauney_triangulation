@@ -139,14 +139,38 @@ def read_input(text,i,step,cpt,csifunction,input_blocks,output_blocks):
                 blocks.append(generate_block_function(csifunction[block_id],0))
                 
             elif("out" in text[j]):
+                
                 input_block=text[j].split("[")[1].split("]")[0].split(",")
-                """
+                indice_input=0
+                diffrent_block=[]
+                for input in input_block:
+                    if("." in input):
+                        id=int(input.split(".")[0][0])
+                        indice_output=int(input.split(".")[1])
+                        dataflow_block=dict()
+                        if(input.split(".")[0][1:] not in diffrent_block):
+                            diffrent_block.append(input.split(".")[0][1:])
+                            controlFlows_block=dict()
+                            controlFlows_block['from']=csifunction[id]["id"]+input.split(".")[0][1:]+".success"
+                            controlFlows_block["to"]="graph.success"
+                            controlFlows.append(controlFlows_block)    
+                        dataflow_block["from"]=csifunction[id]["id"]+input.split(".")[0][1:]+".success."+output_blocks[id][indice_output-1]["label"]
+                        dataflow_block["to"]="graph.success."+csifunction[id]["id"]+input.split(".")[0][1:]+"_"+output_blocks[id][indice_output-1]["label"]
+                        
+                        dataFlows.append(dataflow_block)
+                        indice_input+=1
+                        
+                    else:
+                        pass
+                    
+                """        
                 for output in input_block:
                     if("." in output):
                         print("partial:",output)
                     else:
                         print("complete",output)
                 """
+
                 
             else:
                 block=text[j].split(";")
