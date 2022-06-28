@@ -1,0 +1,57 @@
+{
+    "grammarVersion": 3,
+    "desc": "Do the addition of two values",
+    "implementation": {
+      "name": "library",
+      "version": 2,
+      "settings": {
+        "library": "CSITutorialFunctions"
+      }
+    },
+    "onCall": {
+        "in": {
+            "parameters": [
+              {
+                "label": "a",
+                "desc": "array who want to compute thier reduction",
+                "basicArray": "float"
+              },
+              {
+                "label":"size",
+                "desc": "size of a",
+                "basic": "int32"
+              }
+
+            ]
+          },
+      "out": {
+        "parameters": [
+          {
+            "label": "subdomain1",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label": "subdomain2",
+            "desc": "array who want to compute thier reduction",
+            "basicArray": "float"
+          },
+          {
+            "label":"size1",
+            "desc": "size of subdomain1",
+            "basic": "int32"
+          },
+          {
+            "label":"size2",
+            "desc": "size of subdomain2",
+            "basic": "int32"
+          },
+          {
+            "label":"result",
+            "desc": "size of subdomain2",
+            "basic": "float"
+          }
+        ]
+      }
+    }
+  }

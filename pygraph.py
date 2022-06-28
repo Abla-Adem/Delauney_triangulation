@@ -1,4 +1,5 @@
 
+from copy import deepcopy
 import json
 import pprint
 def print_block(array,print_string,space,incrementation):
@@ -110,34 +111,47 @@ def read_input(text,i,step,cpt,csifunction,input_blocks,output_blocks):
             if( "in" in text[j]):
                 input=text[j].split("[")[1].split("]")[0]
                 
-                
-                csifunctionid=int(input)
-                block_id=int(text[j].split("[")[1].split("]")[0])
-                csi_function_file=csifunction[block_id]["implementation"]["function"]
-                csi_function_file=csi_function_file+"_v"+str(csifunction[csifunctionid]["implementation"]["version"])+".json"
-                with open(csi_function_file) as json_file:
-                    data = json.load(json_file)
-                input_graphe=data["onCall"]["in"]["parameters"]
-                
-                #functions dataFlows
-                #a changer
-                diffrent=0
-                ###
-                for input in input_graphe:
+                if(":"not in input):
+                    csifunctionid=int(input)
+                    block_id=int(text[j].split("[")[1].split("]")[0])
+                    csi_function_file=csifunction[block_id]["implementation"]["function"]
+                    csi_function_file=csi_function_file+"_v"+str(csifunction[csifunctionid]["implementation"]["version"])+".json"
+                    with open(csi_function_file) as json_file:
+                        data = json.load(json_file)
+                    input_graphe=data["onCall"]["in"]["parameters"]
                     
-                    dataflow_block=dict()
-                    dataflow_block["from"]="graph.call."+input["label"]
-                    dataflow_block["to"]=csifunction[block_id]["id"]+"0.call."+input["label"]
-                    dataFlows.append(dataflow_block)
-                    if(diffrent==0):
-                        controlFlows_block=dict()
-                        controlFlows_block["from"]="graph.call"
-                        controlFlows_block["to"]=csifunction[block_id]["id"]+"0.call"
-                        controlFlows.append(controlFlows_block)
-                        diffrent=1
+                    #functions dataFlows
+                    #a changer
+                    diffrent=0
+                    ###
+                    for input in input_graphe:
+                        
+                        dataflow_block=dict()
+                        dataflow_block["from"]="graph.call."+input["label"]
+                        dataflow_block["to"]=csifunction[block_id]["id"]+"0.call."+input["label"]
+                        dataFlows.append(dataflow_block)
+                        if(diffrent==0):
+                            controlFlows_block=dict()
+                            controlFlows_block["from"]="graph.call"
+                            controlFlows_block["to"]=csifunction[block_id]["id"]+"0.call"
+                            controlFlows.append(controlFlows_block)
+                            diffrent=1
+                        
+                    blocks.append(generate_block_function(csifunction[block_id],0))
+                else:
+                    temp=input.split(",")
+                    for input_graph in temp:
+                        id_block=input_graph.split(".")[0]
+                        id_label=input_graph.split(".")[1].split(":")[0]
+                        id_input=""
+                        
+                        if(":" in input_graph):
+                            id_input=input_graph.split(":")[1]
+                        graph_parameter=deepcopy(input_blocks[int(id_block)][int(id_label)-1])
+                        graph_parameter["label"]=input_blocks[int(id_block)][int(id_label)-1]['label']+id_input
+                        input_graphe.append(graph_parameter)
+
                     
-                blocks.append(generate_block_function(csifunction[block_id],0))
-                
             elif("out" in text[j]):
                 
                 input_block=text[j].split("[")[1].split("]")[0].split(",")
