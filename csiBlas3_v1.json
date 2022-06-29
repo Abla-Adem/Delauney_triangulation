@@ -1,0 +1,74 @@
+{
+  "grammarVersion": 3,
+  "desc": "blas3",
+  "implementation": {
+    "name": "library",
+    "version": 2,
+    "settings": {
+      "library": "CSITutorialFunctions"
+    }
+  },
+  "onCall": {
+      "in": {
+          "parameters": [
+           {
+                  "label": "matrix",
+                  "desc": "array who want to compute thier reduction",
+                  "basicArray": "float"
+            },
+            {
+              "label": "submatrix",
+              "desc": "array who want to compute thier reduction",
+              "basicArray": "float"
+            },
+            {
+              "label":"nsub",
+              "desc": "line",
+              "basic": "int32"
+            },
+
+            {
+              "label":"n",
+              "desc": "line",
+              "basic": "int32"
+            },
+            {
+              "label":"m",
+              "desc": "colonne",
+              "basic": "int32"
+            },
+            {
+              "label":"threadpos",
+              "desc": "threadpos",
+              "basic": "int32"
+            }
+
+          ]
+        },
+    "out": {
+      "parameters": [
+        {
+          "label": "result",
+          "desc": "array who want to compute thier reduction",
+          "basicArray": "float"
+        },
+        {
+          "label":"n",
+          "desc": "size of subdomain1",
+          "basic": "int32"
+        },
+        {
+          "label":"m",
+          "desc": "size of subdomain2",
+          "basic": "int32"
+        },
+        {
+          "label":"threadpos",
+          "desc": "thread position",
+          "basic": "int32"
+        }
+        
+      ]
+    }
+  }
+}
